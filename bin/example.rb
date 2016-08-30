@@ -1,0 +1,2 @@
+require 'pietr'
+Pietr.run
