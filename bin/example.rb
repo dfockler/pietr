@@ -1,2 +1,0 @@
-require 'pietr'
-Pietr.run
