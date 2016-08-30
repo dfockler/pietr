@@ -6,6 +6,9 @@ module Pietr
     attr_accessor :stack
     attr_reader :size
 
+    ##
+    # Initializes the state for the interpreter
+    # Takes in a Pietr::Image to process
     def initialize(image)
       @image = image
       @current_color = image.color(0, 0)
@@ -15,17 +18,14 @@ module Pietr
       @stack = []
     end
 
+    ##
+    # Main run loop for the interpreter
     def run
       failed_attempts = 0
       failed_white_attempts = 0
       x = 0
       y = 0
       loop do
-        if $DEBUG
-          dx, dy = move_direction(x, y)
-          next_color = @image.color(dx, dy)
-          puts "X: #{x+1}, Y: #{y+1}, NX: #{dx+1}, NY: #{dy+1}, CR: #{@current_color}, NC: #{next_color}, STACK: #{@stack.reverse}, DP: #{@dp}, CC: #{@cc}"
-        end
         # If white just sail through until we hit another color
         if @current_color == 1
           x_next, y_next = move_direction(x, y)
@@ -70,6 +70,9 @@ module Pietr
       end
     end
 
+    ##
+    # Calculates the hue and shade difference and runs the correct operation
+    # through Pietr::Ops
     def process_action(current_color, next_color)
       if next_color != 1
         hue = Pietr::Color.hue_difference(current_color, next_color)
@@ -78,6 +81,9 @@ module Pietr
       end
     end
 
+    ##
+    # Based on the number of attempts this either toggles the CC back and forth
+    # or updates the current direction of the DP
     def update_movement(attempts)
       if attempts % 2 == 0
         toggle_cc
@@ -86,6 +92,8 @@ module Pietr
       end
     end
 
+    ##
+    # Given an X, Y returns the next step based on the DP
     def move_direction(x, y)
       x_next = x
       y_next = y
@@ -129,6 +137,8 @@ module Pietr
       end
     end
 
+    ##
+    # Checks if a given X, Y is either out of bounds or is hitting a black block
     def restricted?(x, y)
       out_of_bounds?(x, y) || @image.color(x, y) == 0
     end
@@ -141,6 +151,7 @@ module Pietr
       @cc == :right ? @cc = :left : @cc = :right
     end
 
+    ##
     # Gets the index of the codel we are moving from and the size of the
     # current color block, start max values at the index we are starting
     # from, and change them depending on the dp and cc
@@ -159,7 +170,6 @@ module Pietr
       if @current_color == value && marked[y][x] == nil
         marked[y][x] = true #"marks" the value as already checked
         size += 1 #get the size of the color block
-        # puts "#{x+1}, #{y+1}, #{mx+1}, #{my+1}, #{dp}, #{cc}" if x >= 6 && @current_color == 13
         mx, my, size = find_block_info_recursive(marked, size, dp, cc, x+1, y, mx, my)
         mx, my, size = find_block_info_recursive(marked, size, dp, cc, x-1, y, mx, my)
         mx, my, size = find_block_info_recursive(marked, size, dp, cc, x, y+1, mx, my)

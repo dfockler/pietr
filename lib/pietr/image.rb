@@ -23,8 +23,8 @@ module Pietr
     # Returns a Pietr useable color code
     def color(x, y)
       Pietr::Color.color_code(ChunkyPNG::Color.to_hex(@image[x, y]))
-    rescue Exception => e
-      -1      
+    rescue Exception
+      -1
     end
   end
 end

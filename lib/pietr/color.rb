@@ -49,10 +49,11 @@ module Pietr
       hue
     end
 
+    ##
+    # Returns the color code given a color hex value
+    # The tens place has the hue encoded
+    # The ones place has the shade encoded
     def self.color_code(color)
-      # Tens place is the hue difference
-      # Ones places is the shade difference
-      
       case color
       when "#ffc0c0ff" # light red
         11

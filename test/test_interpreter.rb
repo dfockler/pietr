@@ -1,4 +1,4 @@
-require_relative './test_helper'
+require 'test_helper'
 
 class TestInterpreter < Minitest::Test
   def setup
@@ -7,6 +7,6 @@ class TestInterpreter < Minitest::Test
   end
 
   def test_init
-    # assert @interpreter
+    assert @interpreter
   end
 end
